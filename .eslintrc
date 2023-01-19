@@ -40,7 +40,7 @@
     "no-trailing-whitespace": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always"],
-    "trailing-comma": false,
+    "trailing-comma": true,
     "indent": [true, "tabs", 4]
   }
 }
