@@ -4,16 +4,16 @@ import { AuthController } from './auth.controller';
 import { AuthModel } from './auth.model';
 
 @Module({
-	controllers: [AuthController],
-	imports: [
-		TypegooseModule.forFeature([
-			{
-				typegooseClass: AuthModel,
-				schemaOptions: {
-					collection: 'Auth'
-				}
-			}
-		])
-	]
+  controllers: [AuthController],
+  imports: [
+    TypegooseModule.forFeature([
+      {
+        typegooseClass: AuthModel,
+        schemaOptions: {
+          collection: 'Auth',
+        },
+      },
+    ]),
+  ],
 })
-export class AuthModule { }
+export class AuthModule {}

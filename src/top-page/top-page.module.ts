@@ -4,16 +4,16 @@ import { TopPageController } from './top-page.controller';
 import { TopPageModel } from './top-page.model';
 
 @Module({
-	controllers: [TopPageController],
-	imports: [
-		TypegooseModule.forFeature([
-			{
-				typegooseClass: TopPageModel,
-				schemaOptions: {
-					collection: 'TopPage'
-				}
-			}
-		])
-	]
+  controllers: [TopPageController],
+  imports: [
+    TypegooseModule.forFeature([
+      {
+        typegooseClass: TopPageModel,
+        schemaOptions: {
+          collection: 'TopPage',
+        },
+      },
+    ]),
+  ],
 })
-export class TopPageModule { }
+export class TopPageModule {}

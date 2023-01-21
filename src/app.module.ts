@@ -8,17 +8,17 @@ import { TypegooseModule } from 'nestjs-typegoose';
 import { getMongoConfig } from './configs/mongo.config';
 
 @Module({
-	imports: [
-		ConfigModule.forRoot(),
-		TypegooseModule.forRootAsync({
-			imports: [ConfigModule],
-			inject: [ConfigService],
-			useFactory: getMongoConfig
-		}),
-		AuthModule,
-		TopPageModule,
-		ProductModule,
-		ReviewModule,
-	],
+  imports: [
+    ConfigModule.forRoot(),
+    TypegooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: getMongoConfig,
+    }),
+    AuthModule,
+    TopPageModule,
+    ProductModule,
+    ReviewModule,
+  ],
 })
-export class AppModule { }
+export class AppModule {}
