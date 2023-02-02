@@ -7,11 +7,11 @@ import {
   Patch,
   Delete,
   HttpCode,
-  Inject,
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { throws } from 'assert';
+import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { PRODUCT_NOT_FOUND } from './product.constants';
@@ -22,6 +22,7 @@ import { ProductService } from './product.service';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(@Body() dto: CreateProductDto) {
     return this.productService.create(dto);
