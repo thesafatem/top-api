@@ -11,7 +11,7 @@ const loginDto: AuthDto = {
 	password: 'test'
 }
 
-describe('AppController (e2e)', () => {
+describe('AuthController (e2e)', () => {
 	let app: INestApplication;
 
 	beforeEach(async () => {
