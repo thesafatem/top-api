@@ -1,14 +1,14 @@
 import {
-	Controller,
-	Body,
-	Param,
-	Get,
-	Post,
-	Patch,
-	Delete,
-	HttpCode,
-	HttpException,
-	HttpStatus,
+  Controller,
+  Body,
+  Param,
+  Get,
+  Post,
+  Patch,
+  Delete,
+  HttpCode,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -21,38 +21,40 @@ import { ProductService } from './product.service';
 
 @Controller('product')
 export class ProductController {
-	constructor(private readonly productService: ProductService) { }
+  constructor(private readonly productService: ProductService) {}
 
-	@UseGuards(JwtAuthGuard)
-	@Post('create')
-	async create(@Body() dto: CreateProductDto, @UserEmail() email: string) {
-		return this.productService.create(dto);
-	}
+  @UseGuards(JwtAuthGuard)
+  @Post('create')
+  async create(@Body() dto: CreateProductDto, @UserEmail() email: string) {
+    return this.productService.create(dto);
+  }
 
-	@Get(':id')
-	async get(@Param('id') id: string) {
-		const product = this.productService.getById(id);
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async get(@Param('id') id: string) {
+    const product = await this.productService.getById(id);
 
-		if (!product) {
-			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
+    if (!product) {
+      throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
 
-		return product;
-	}
+    return product;
+  }
 
-	@Delete(':id')
-	async delete(@Param('id') id: string) {
-		const deletedDoc = await this.productService.deleteById(id);
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async delete(@Param('id') id: string) {
+    const deletedDoc = await this.productService.deleteById(id);
 
-		if (!deletedDoc) {
-			throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
-		}
-	}
+    if (!deletedDoc) {
+      throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    }
+  }
 
-	//   @Patch(':id')
-	//   async patch(@Param('id') id: string, @Body() dto: ProductModel) {}
+  //   @Patch(':id')
+  //   async patch(@Param('id') id: string, @Body() dto: ProductModel) {}
 
-	//   @HttpCode(200)
-	//   @Post()
-	//   async find(@Body() dto: FindProductDto) {}
+  //   @HttpCode(200)
+  //   @Post()
+  //   async find(@Body() dto: FindProductDto) {}
 }
