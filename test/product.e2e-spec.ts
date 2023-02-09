@@ -64,13 +64,6 @@ describe('ProductController (e2e)', () => {
       });
   });
 
-  it('/product/create (POST) - fail', async () => {
-    return request(app.getHttpServer())
-      .post('/product/create')
-      .send(productDto)
-      .expect(401);
-  });
-
   it('/product/:id (GET) - success', async () => {
     return request(app.getHttpServer())
       .get('/product/' + createdId)

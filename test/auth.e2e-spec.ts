@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 import { disconnect } from 'mongoose';
-import { AuthDto } from 'src/auth/dto/auth.dto';
+import { AuthDto } from '../src/auth/dto/auth.dto';
 import {
   INCORRECT_PASSWORD_ERROR,
   USER_NOT_FOUND_ERROR,
