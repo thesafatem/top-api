@@ -5,6 +5,7 @@ import {
   Min,
   ValidateNested,
   IsEnum,
+  IsOptional,
 } from 'class-validator';
 
 export enum TopCategory {
@@ -55,6 +56,7 @@ export class CreateTopPageDto {
   @IsString()
   category: string;
 
+  @IsOptional()
   @Type(() => HhData)
   @ValidateNested()
   hh?: HhData;

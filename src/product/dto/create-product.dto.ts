@@ -1,5 +1,11 @@
 import { Type } from 'class-transformer';
-import { IsNumber, IsString, Min, ValidateNested } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+  ValidateNested,
+} from 'class-validator';
 
 export class ProductCharacteristicDto {
   @IsString()
@@ -20,6 +26,7 @@ export class CreateProductDto {
   @IsNumber()
   price: number;
 
+  @IsOptional()
   @Min(0)
   @IsNumber()
   oldPrice?: number;
