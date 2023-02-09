@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsNumber,
   IsOptional,
   IsString,
@@ -43,12 +44,15 @@ export class CreateProductDto {
   @IsString()
   disadvantages: string;
 
+  @IsArray()
   @IsString({ each: true })
   categories: string[];
 
+  @IsArray()
   @IsString({ each: true })
   tags: string[];
 
+  @IsArray()
   @ValidateNested({ each: true })
   @Type(() => ProductCharacteristicDto)
   characteristics: ProductCharacteristicDto[];

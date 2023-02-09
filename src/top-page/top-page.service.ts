@@ -15,7 +15,7 @@ export class TopPageService {
     return this.topPageModel.create(dto);
   }
 
-  async getById(id: string): Promise<DocumentType<TopPageModel> | null> {
+  async findById(id: string): Promise<DocumentType<TopPageModel> | null> {
     return this.topPageModel.findById(id).exec();
   }
 

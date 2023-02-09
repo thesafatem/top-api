@@ -34,7 +34,7 @@ export class TopPageController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async get(@Param('id') id: string) {
-    const topPage = await this.topPageService.getById(id);
+    const topPage = await this.topPageService.findById(id);
 
     if (!topPage) {
       throw new HttpException(TOP_PAGE_NOT_FOUND, HttpStatus.NOT_FOUND);

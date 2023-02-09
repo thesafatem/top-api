@@ -16,7 +16,7 @@ export class ReviewService {
     return this.reviewModel.create(dto);
   }
 
-  async delete(id: string): Promise<DocumentType<ReviewModel> | null> {
+  async deleteById(id: string): Promise<DocumentType<ReviewModel> | null> {
     return this.reviewModel.findByIdAndDelete(id).exec();
   }
 

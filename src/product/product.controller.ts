@@ -36,7 +36,7 @@ export class ProductController {
   @UsePipes(new ValidationPipe())
   @Get(':id')
   async get(@Param('id') id: string) {
-    const product = await this.productService.getById(id);
+    const product = await this.productService.findById(id);
 
     if (!product) {
       throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
