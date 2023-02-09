@@ -11,6 +11,7 @@ import {
   HttpStatus,
   UsePipes,
   ValidationPipe,
+  NotFoundException,
 } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
@@ -27,7 +28,7 @@ export class ProductController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
-  @Post('create')
+  @Post('/')
   async create(@Body() dto: CreateProductDto, @UserEmail() email: string) {
     return this.productService.create(dto);
   }
@@ -56,10 +57,20 @@ export class ProductController {
     }
   }
 
-  //   @Patch(':id')
-  //   async patch(@Param('id') id: string, @Body() dto: ProductModel) {}
+  @Patch(':id')
+  async patch(@Param('id') id: string, @Body() dto: ProductModel) {
+    const updatedProduct = await this.productService.updateById(id, dto);
+    if (!updatedProduct) {
+      throw new NotFoundException(PRODUCT_NOT_FOUND);
+    }
 
-  //   @HttpCode(200)
-  //   @Post()
-  //   async find(@Body() dto: FindProductDto) {}
+    return updatedProduct;
+  }
+
+  @UsePipes(new ValidationPipe())
+  @HttpCode(200)
+  @Post('/find')
+  async find(@Body() dto: FindProductDto) {
+    return this.productService.findWithReviews(dto);
+  }
 }

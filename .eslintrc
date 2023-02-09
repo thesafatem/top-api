@@ -6,19 +6,24 @@
   "rules": {
     "@typescript-eslint/no-var-requires": "error",
     "@typescript-eslint/promise-function-async": "warn",
+    "no-var-requires": true,
+    "no-any": true,
+    "promise-function-async": true,
     "await-promise": true,
     "curly": true,
-    "@typescript-eslint/prefer-for-of": "warn",
+    "prefer-for-dcof": true,
     "forin": true,
     "no-console": [true, "log", "error"],
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-duplicate-switch-case": true,
     "no-invalid-template-strings": true,
+    "no-misused-new": true,
     "no-return-await": true,
     "no-shadowed-variable": true,
     "no-switch-case-fall-through": true,
     "no-tautology-expression": true,
+    "no-unused-variable": true,
     "no-var-keyword": true,
     "static-this": true,
     "switch-default": true,
@@ -36,11 +41,14 @@
     ],
     "switch-final-break": true,
     "import-spacing": true,
-    "max-line-length": [true, 70],
+    "max-line-length": [true, 120],
     "no-trailing-whitespace": false,
     "quotemark": [true, "single"],
     "semicolon": [true, "always"],
-    "trailing-comma": true,
-    "indent": [true, "tabs", 4]
+    "trailing-comma": false,
+    "indent": [true, "tabs", 4],
+    "linterOptions": {
+      "exclude": ["./src/**/*.d.ts"]
+    }
   }
 }
