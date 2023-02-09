@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   CreateProductDto,
-  ProductCharacteristic,
+  ProductCharacteristicDto,
 } from '../src/product/dto/create-product.dto';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
@@ -15,7 +15,7 @@ const loginDto: AuthDto = {
   password: 'test',
 };
 
-const productCharacteristics: ProductCharacteristic[] = [
+const productCharacteristics: ProductCharacteristicDto[] = [
   {
     name: 'name',
     value: 'value',
@@ -28,7 +28,6 @@ const productDto: CreateProductDto = {
   price: 1,
   oldPrice: 2,
   credit: 3,
-  calculatedRating: 4,
   description: 'test product description',
   advantages: 'test advantages',
   disadvantages: 'test disadvantages',
@@ -75,7 +74,7 @@ describe('ProductController (e2e)', () => {
       .set('Authorization', 'Bearer ' + token)
       .send({
         ...productDto,
-        calculatedRating: -10,
+        price: -10,
       })
       .expect(400)
       .then(({ body }: request.Response) => {

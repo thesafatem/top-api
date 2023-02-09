@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNumber, IsString, Min, ValidateNested } from 'class-validator';
 
-export class ProductCharacteristic {
+export class ProductCharacteristicDto {
   @IsString()
   name: string;
 
@@ -22,14 +22,10 @@ export class CreateProductDto {
 
   @Min(0)
   @IsNumber()
-  oldPrice: number;
+  oldPrice?: number;
 
   @IsNumber()
   credit: number;
-
-  @Min(0)
-  @IsNumber()
-  calculatedRating: number;
 
   @IsString()
   description: string;
@@ -47,6 +43,6 @@ export class CreateProductDto {
   tags: string[];
 
   @ValidateNested({ each: true })
-  @Type(() => ProductCharacteristic)
-  characteristics: ProductCharacteristic[];
+  @Type(() => ProductCharacteristicDto)
+  characteristics: ProductCharacteristicDto[];
 }
