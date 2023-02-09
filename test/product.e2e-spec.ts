@@ -1,6 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateProductDto } from '../src/product/dto/create-product.dto';
+import {
+  CreateProductDto,
+  ProductCharacteristic,
+} from '../src/product/dto/create-product.dto';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { AuthDto } from '../src/auth/dto/auth.dto';
@@ -12,6 +15,13 @@ const loginDto: AuthDto = {
   password: 'test',
 };
 
+const productCharacteristics: ProductCharacteristic[] = [
+  {
+    name: 'name',
+    value: 'value',
+  },
+];
+
 const productDto: CreateProductDto = {
   image: 'test.png',
   title: 'test product',
@@ -19,17 +29,12 @@ const productDto: CreateProductDto = {
   oldPrice: 2,
   credit: 3,
   calculatedRating: 4,
-  description: 'product description',
-  advantages: 'advantages',
-  disadvantages: 'disadvantages',
-  categories: ['category 1', 'category 2'],
-  tags: ['tag 1', 'tag 2'],
-  characteristics: [
-    {
-      name: 'name',
-      value: 'value',
-    },
-  ],
+  description: 'test product description',
+  advantages: 'test advantages',
+  disadvantages: 'test disadvantages',
+  categories: ['test category 1', 'test category 2'],
+  tags: ['test tag 1', 'test tag 2'],
+  characteristics: productCharacteristics,
 };
 
 describe('ProductController (e2e)', () => {
@@ -61,6 +66,20 @@ describe('ProductController (e2e)', () => {
       .then(({ body }: request.Response) => {
         createdId = body._id;
         expect(createdId).toBeDefined();
+      });
+  });
+
+  it('/product/create (POST) - fail', async () => {
+    return request(app.getHttpServer())
+      .post('/product/create')
+      .set('Authorization', 'Bearer ' + token)
+      .send({
+        ...productDto,
+        calculatedRating: -10,
+      })
+      .expect(400)
+      .then(({ body }: request.Response) => {
+        console.log(body);
       });
   });
 
