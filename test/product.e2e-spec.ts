@@ -56,9 +56,9 @@ describe('ProductController (e2e)', () => {
     token = accessToken;
   });
 
-  it('/product/create (POST) - success', async () => {
+  it('/product (POST) - success', async () => {
     return request(app.getHttpServer())
-      .post('/product/create')
+      .post('/product')
       .set('Authorization', 'Bearer ' + token)
       .send(productDto)
       .expect(201)
@@ -68,9 +68,9 @@ describe('ProductController (e2e)', () => {
       });
   });
 
-  it('/product/create (POST) - fail', async () => {
+  it('/product (POST) - fail', async () => {
     return request(app.getHttpServer())
-      .post('/product/create')
+      .post('/product')
       .set('Authorization', 'Bearer ' + token)
       .send({
         ...productDto,
@@ -96,6 +96,33 @@ describe('ProductController (e2e)', () => {
       .expect(404, {
         statusCode: 404,
         message: PRODUCT_NOT_FOUND,
+        error: 'Not Found',
+      });
+  });
+
+  it('/product/:id (PATCH) - success', async () => {
+    return request(app.getHttpServer())
+      .patch('/product/' + createdId)
+      .set('Authorization', 'Bearer ' + token)
+      .send({
+        ...productDto,
+        price: 100,
+      })
+      .expect(200);
+  });
+
+  it('/product/:id (PATCH) - fail', async () => {
+    return request(app.getHttpServer())
+      .patch('/product/' + new Types.ObjectId().toHexString())
+      .set('Authorization', 'Bearer ' + token)
+      .send({
+        ...productDto,
+        price: 100,
+      })
+      .expect(404, {
+        statusCode: 404,
+        message: PRODUCT_NOT_FOUND,
+        error: 'Not Found',
       });
   });
 
@@ -113,6 +140,7 @@ describe('ProductController (e2e)', () => {
       .expect(404, {
         statusCode: 404,
         message: PRODUCT_NOT_FOUND,
+        error: 'Not Found',
       });
   });
 

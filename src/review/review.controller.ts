@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   UseGuards,
@@ -23,7 +24,7 @@ export class ReviewController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
-  @Post('create')
+  @Post('/')
   async create(@Body() dto: CreateReviewDto) {
     return this.reviewService.create(dto);
   }
@@ -33,7 +34,7 @@ export class ReviewController {
     const deletedDoc = await this.reviewService.deleteById(id);
 
     if (!deletedDoc) {
-      throw new HttpException(REVIEW_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(REVIEW_NOT_FOUND);
     }
   }
 

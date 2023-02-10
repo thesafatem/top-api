@@ -42,9 +42,9 @@ describe('ReviewController (e2e)', () => {
     token = accessToken;
   });
 
-  it('/review/create (POST) - success', async () => {
+  it('/review (POST) - success', async () => {
     return request(app.getHttpServer())
-      .post('/review/create')
+      .post('/review')
       .set('Authorization', 'Bearer ' + token)
       .send(testDto)
       .expect(201)
@@ -54,9 +54,9 @@ describe('ReviewController (e2e)', () => {
       });
   });
 
-  it('/review/create (POST) - fail', async () => {
+  it('/review (POST) - fail', async () => {
     return request(app.getHttpServer())
-      .post('/review/create')
+      .post('/review')
       .set('Authorization', 'Bearer ' + token)
       .send({ ...testDto, rating: 0 })
       .expect(400)
@@ -95,6 +95,7 @@ describe('ReviewController (e2e)', () => {
       .expect(404, {
         statusCode: 404,
         message: REVIEW_NOT_FOUND,
+        error: 'Not Found',
       });
   });
 

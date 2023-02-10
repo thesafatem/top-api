@@ -28,7 +28,7 @@ export class TopPageController {
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
-  @Post('create')
+  @Post('/')
   async create(@Body() dto: CreateTopPageDto) {
     return this.topPageService.create(dto);
   }
@@ -39,7 +39,7 @@ export class TopPageController {
     const topPage = await this.topPageService.findById(id);
 
     if (!topPage) {
-      throw new HttpException(TOP_PAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(TOP_PAGE_NOT_FOUND);
     }
 
     return topPage;
@@ -51,7 +51,7 @@ export class TopPageController {
     const page = await this.topPageService.deleteById(id);
 
     if (!page) {
-      throw new HttpException(TOP_PAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(TOP_PAGE_NOT_FOUND);
     }
   }
 

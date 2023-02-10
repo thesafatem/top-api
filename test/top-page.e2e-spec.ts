@@ -4,16 +4,19 @@ import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { Types, disconnect } from 'mongoose';
 import { AuthDto } from '../src/auth/dto/auth.dto';
-import { CreateTopPageDto } from 'src/top-page/dto/create-top-page.dto';
-import { HhData } from '../src/top-page/top-page.model';
+import {
+  CreateTopPageDto,
+  HhDataDto,
+} from 'src/top-page/dto/create-top-page.dto';
 import { TOP_PAGE_NOT_FOUND } from '../src/top-page/top-page.constants';
+import { FindTopPageDto } from '../src/top-page/dto/find-top-page.dto';
 
 const loginDto: AuthDto = {
   login: 'test@test.com',
   password: 'test',
 };
 
-const hhData: HhData = {
+const hhData: HhDataDto = {
   count: 1,
   juniorSalary: 2,
   middleSalary: 3,
@@ -38,6 +41,10 @@ const testDto: CreateTopPageDto = {
   tags: ['test tag 1', 'test tag 2'],
 };
 
+const testFindDto: FindTopPageDto = {
+  firstCategory: 2,
+};
+
 describe('TopPageController (e2e)', () => {
   let app: INestApplication;
   let createdId: string;
@@ -58,9 +65,9 @@ describe('TopPageController (e2e)', () => {
     token = accessToken;
   });
 
-  it('/top-page/create (POST) - success', async () => {
+  it('/top-page (POST) - success', async () => {
     return request(app.getHttpServer())
-      .post('/top-page/create')
+      .post('/top-page')
       .set('Authorization', 'Bearer ' + token)
       .send(testDto)
       .expect(201)
@@ -70,9 +77,9 @@ describe('TopPageController (e2e)', () => {
       });
   });
 
-  it('/top-page/create (POST) - fail', async () => {
+  it('/top-page (POST) - fail', async () => {
     return request(app.getHttpServer())
-      .post('/top-page/create')
+      .post('/top-page')
       .set('Authorization', 'Bearer ' + token)
       .send({
         ...testDto,
@@ -104,6 +111,41 @@ describe('TopPageController (e2e)', () => {
       .expect(404, {
         statusCode: 404,
         message: TOP_PAGE_NOT_FOUND,
+        error: 'Not Found',
+      });
+  });
+
+  it('/top-page/:id (PATCH) - success', async () => {
+    return request(app.getHttpServer())
+      .patch('/top-page/' + createdId)
+      .set('Authorization', 'Bearer ' + token)
+      .send({
+        ...testDto,
+        firstCategory: 2,
+      })
+      .expect(200);
+  });
+
+  it('/top-page/:id (PATCH) - fail', async () => {
+    return request(app.getHttpServer())
+      .patch('/top-page/' + new Types.ObjectId().toHexString())
+      .set('Authorization', 'Bearer ' + token)
+      .send(testDto)
+      .expect(404, {
+        statusCode: 404,
+        message: TOP_PAGE_NOT_FOUND,
+        error: 'Not Found',
+      });
+  });
+
+  it('/top-page/find (POST) - success', async () => {
+    return request(app.getHttpServer())
+      .post('/top-page/find')
+      .set('Authorization', 'Bearer ' + token)
+      .send(testFindDto)
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body.length).toBeGreaterThanOrEqual(1);
       });
   });
 
@@ -121,6 +163,7 @@ describe('TopPageController (e2e)', () => {
       .expect(404, {
         statusCode: 404,
         message: TOP_PAGE_NOT_FOUND,
+        error: 'Not Found',
       });
   });
 

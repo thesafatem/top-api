@@ -41,7 +41,7 @@ export class ProductController {
     const product = await this.productService.findById(id);
 
     if (!product) {
-      throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(PRODUCT_NOT_FOUND);
     }
 
     return product;
@@ -54,7 +54,7 @@ export class ProductController {
     const deletedDoc = await this.productService.deleteById(id);
 
     if (!deletedDoc) {
-      throw new HttpException(PRODUCT_NOT_FOUND, HttpStatus.NOT_FOUND);
+      throw new NotFoundException(PRODUCT_NOT_FOUND);
     }
   }
 
