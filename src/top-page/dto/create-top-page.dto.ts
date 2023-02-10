@@ -15,7 +15,7 @@ export enum TopCategory {
   Goods,
 }
 
-export class HhData {
+export class HhDataDto {
   @IsNumber()
   count: number;
 
@@ -32,7 +32,7 @@ export class HhData {
   seniorSalary: number;
 }
 
-export class TopPageAdvantage {
+export class TopPageAdvantageDto {
   @IsString()
   title: string;
 
@@ -57,13 +57,13 @@ export class CreateTopPageDto {
   category: string;
 
   @IsOptional()
-  @Type(() => HhData)
+  @Type(() => HhDataDto)
   @ValidateNested()
-  hh?: HhData;
+  hh?: HhDataDto;
 
   @ValidateNested({ each: true })
-  @Type(() => TopPageAdvantage)
-  advantages: TopPageAdvantage[];
+  @Type(() => TopPageAdvantageDto)
+  advantages: TopPageAdvantageDto[];
 
   @IsString()
   seoText: string;

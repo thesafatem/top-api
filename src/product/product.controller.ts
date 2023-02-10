@@ -58,6 +58,7 @@ export class ProductController {
     }
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async patch(
     @Param('id', IdValidationPipe) id: string,
@@ -71,6 +72,7 @@ export class ProductController {
     return updatedProduct;
   }
 
+  @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('/find')

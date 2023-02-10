@@ -26,7 +26,7 @@ export class ProductService {
   }
 
   async updateById(id: string, dto: CreateProductDto) {
-    return this.productModel.findByIdAndUpdate(id, dto, { new: true });
+    return this.productModel.findByIdAndUpdate(id, dto, { new: true }).exec();
   }
 
   async findWithReviews(dto: FindProductDto) {
