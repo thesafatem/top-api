@@ -13,6 +13,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { FindTopPageDto } from './dto/find-top-page.dto';
@@ -33,7 +34,7 @@ export class TopPageController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async get(@Param('id') id: string) {
+  async get(@Param('id', IdValidationPipe) id: string) {
     const topPage = await this.topPageService.findById(id);
 
     if (!topPage) {
@@ -45,7 +46,7 @@ export class TopPageController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async delete(@Param('id') id: string) {
+  async delete(@Param('id', IdValidationPipe) id: string) {
     const topPage = await this.topPageService.deleteById(id);
 
     if (!topPage) {

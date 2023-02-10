@@ -33,27 +33,39 @@ export class ProductService {
     return this.productModel
       .aggregate([
         {
+          // take if array contains some element
           $match: {
             categories: dto.category,
           },
         },
         {
+          // by default sort is not stable
           $sort: {
             _id: 1,
           },
         },
         {
+          // limit the number of retrieved products
           $limit: dto.limit,
         },
         {
+          // go to another collection
           $lookup: {
+            // name of that collection
             from: 'Review',
+
+            // field in the inner collection
             localField: '_id',
+
+            // field in the main collection
             foreignField: 'productId',
+
+            // alias
             as: 'reviews',
           },
         },
         {
+          // add some fields to the output
           $addFields: {
             reviewCount: { $size: '$reviews' },
             reviewAverageRating: { $avg: '$reviews.rating' },
