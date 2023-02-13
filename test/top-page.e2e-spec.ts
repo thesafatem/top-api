@@ -26,7 +26,7 @@ const hhData: HhDataDto = {
 const testDto: CreateTopPageDto = {
   firstCategory: 1,
   secondCategory: 'second category',
-  alias: 'test alias',
+  alias: 'testAlias',
   title: 'test title',
   category: 'test category',
   hh: hhData,
@@ -42,7 +42,7 @@ const testDto: CreateTopPageDto = {
 };
 
 const testFindDto: FindTopPageDto = {
-  firstCategory: 2,
+  firstCategory: 1,
 };
 
 describe('TopPageController (e2e)', () => {
@@ -115,6 +115,37 @@ describe('TopPageController (e2e)', () => {
       });
   });
 
+  it('/top-page/find (POST) - success', async () => {
+    return request(app.getHttpServer())
+      .post('/top-page/find')
+      .set('Authorization', 'Bearer ' + token)
+      .send(testFindDto)
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body.length).toBeGreaterThanOrEqual(1);
+      });
+  });
+
+  it('/top-page/by-alias/:alias (GET)', async () => {
+    return request(app.getHttpServer())
+      .get('/top-page/by-alias/' + testDto.alias)
+      .set('Authorization', 'Bearer ' + token)
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body.length).toBeGreaterThanOrEqual(1);
+      });
+  });
+
+  it('/top-page/text-search/:text (GET)', async () => {
+    return request(app.getHttpServer())
+      .get('/top-page/text-search/' + testDto.title.split(' ')[0])
+      .set('Authorization', 'Bearer ' + token)
+      .expect(200)
+      .then(({ body }: request.Response) => {
+        expect(body.length).toBeGreaterThanOrEqual(1);
+      });
+  });
+
   it('/top-page/:id (PATCH) - success', async () => {
     return request(app.getHttpServer())
       .patch('/top-page/' + createdId)
@@ -135,17 +166,6 @@ describe('TopPageController (e2e)', () => {
         statusCode: 404,
         message: TOP_PAGE_NOT_FOUND,
         error: 'Not Found',
-      });
-  });
-
-  it('/top-page/find (POST) - success', async () => {
-    return request(app.getHttpServer())
-      .post('/top-page/find')
-      .set('Authorization', 'Bearer ' + token)
-      .send(testFindDto)
-      .expect(200)
-      .then(({ body }: request.Response) => {
-        expect(body.length).toBeGreaterThanOrEqual(1);
       });
   });
 

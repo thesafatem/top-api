@@ -89,7 +89,7 @@ export class TopPageController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('textSearch/:text')
+  @Get('text-search/:text')
   async textSearch(@Param('text') text: string) {
     return this.topPageService.findByText(text);
   }
