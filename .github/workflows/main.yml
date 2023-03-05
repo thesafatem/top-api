@@ -16,4 +16,4 @@ jobs:
           name: https://ghcr.io/thesafatem/top-api/top-api
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: 'develop'
+          # tags: 'develop'
