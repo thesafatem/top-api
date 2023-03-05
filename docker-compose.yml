@@ -18,6 +18,7 @@ services:
       - ./docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     
   api:
+    image: ghcr.io/thesafatem/top-api/top-api:develop
     build: .
     container_name: api
     network_mode: host
