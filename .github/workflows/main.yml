@@ -15,5 +15,5 @@ jobs:
           registry: docker.pkg.github.com
           name: docker.pkg.github.com/thesafatem/top-api/top-api
           username: ${{ secrets.DOCKER_USERNAME }}
-          passwords: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           tags: 'develop'
