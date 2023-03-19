@@ -4,6 +4,8 @@ import { InjectModel } from 'nestjs-typegoose';
 import { CreateTopPageDto, TopCategory } from './dto/create-top-page.dto';
 import { FindByCategoryDto } from './dto/find-by-category.output.dto';
 import { TopPageModel } from './top-page.model';
+import { addDays } from 'date-fns';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class TopPageService {
@@ -59,9 +61,27 @@ export class TopPageService {
   }
 
   async updateById(
-    id: string,
+    id: string | Types.ObjectId,
     dto: CreateTopPageDto,
   ): Promise<DocumentType<TopPageModel> | null> {
     return this.topPageModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+  }
+
+  async findByHhDate(date: Date): Promise<DocumentType<TopPageModel>[]> {
+    return this.topPageModel
+      .find({
+        firstCategory: 0,
+        $or: [
+          {
+            'hh.updatedAt': {
+              $lt: addDays(date, -1),
+            },
+          },
+          {
+            'hh.updatedAt': { $exists: false },
+          },
+        ],
+      })
+      .exec();
   }
 }

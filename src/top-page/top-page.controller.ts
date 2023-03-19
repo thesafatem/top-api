@@ -4,8 +4,6 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpException,
-  HttpStatus,
   NotFoundException,
   Param,
   Patch,
@@ -19,12 +17,16 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { FindTopPageDto } from './dto/find-top-page.dto';
 import { TOP_PAGE_NOT_FOUND } from './top-page.constants';
-import { TopPageModel } from './top-page.model';
 import { TopPageService } from './top-page.service';
+import { HhService } from 'src/hh/hh.service';
+import { Cron } from '@nestjs/schedule';
 
 @Controller('top-page')
 export class TopPageController {
-  constructor(private readonly topPageService: TopPageService) {}
+  constructor(
+    private readonly topPageService: TopPageService,
+    private readonly hhService: HhService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @UsePipes(new ValidationPipe())
@@ -92,5 +94,15 @@ export class TopPageController {
   @Get('text-search/:text')
   async textSearch(@Param('text') text: string) {
     return this.topPageService.findByText(text);
+  }
+
+  @Cron('0 0 * * *')
+  async test() {
+    const data = await this.topPageService.findByHhDate(new Date());
+    for (let page of data) {
+      const hhData = await this.hhService.getData(page.category);
+      page.hh = hhData;
+      this.topPageService.updateById(page._id, page);
+    }
   }
 }
