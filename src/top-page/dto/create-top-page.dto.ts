@@ -1,80 +1,80 @@
 import { Type } from 'class-transformer';
 import {
-  IsString,
-  IsNumber,
-  Min,
-  ValidateNested,
-  IsEnum,
-  IsOptional,
-  IsDate,
+	IsString,
+	IsNumber,
+	Min,
+	ValidateNested,
+	IsEnum,
+	IsOptional,
+	IsDate,
 } from 'class-validator';
 
 export enum TopCategory {
-  Courses,
-  Services,
-  Books,
-  Goods,
+	Courses,
+	Services,
+	Books,
+	Goods,
 }
 
 export class HhDataDto {
-  @IsNumber()
-  count: number;
+	@IsNumber()
+	count: number;
 
-  @Min(0)
-  @IsNumber()
-  juniorSalary: number;
+	@Min(0)
+	@IsNumber()
+	juniorSalary: number;
 
-  @Min(0)
-  @IsNumber()
-  middleSalary: number;
+	@Min(0)
+	@IsNumber()
+	middleSalary: number;
 
-  @Min(0)
-  @IsNumber()
-  seniorSalary: number;
+	@Min(0)
+	@IsNumber()
+	seniorSalary: number;
 
-  @IsDate()
-  updatedAt: Date;
+	@IsDate()
+	updatedAt: Date;
 }
 
 export class TopPageAdvantageDto {
-  @IsString()
-  title: string;
+	@IsString()
+	title: string;
 
-  @IsString()
-  description: string;
+	@IsString()
+	description: string;
 }
 
 export class CreateTopPageDto {
-  @IsEnum(TopCategory)
-  firstCategory: TopCategory;
+	@IsEnum(TopCategory)
+	firstCategory: TopCategory;
 
-  @IsString()
-  secondCategory: string;
+	@IsString()
+	secondCategory: string;
 
-  @IsString()
-  alias: string;
+	@IsString()
+	alias: string;
 
-  @IsString()
-  title: string;
+	@IsString()
+	title: string;
 
-  @IsString()
-  category: string;
+	@IsString()
+	category: string;
 
-  @IsOptional()
-  @Type(() => HhDataDto)
-  @ValidateNested()
-  hh?: HhDataDto;
+	@IsOptional()
+	@Type(() => HhDataDto)
+	@ValidateNested()
+	hh?: HhDataDto;
 
-  @ValidateNested({ each: true })
-  @Type(() => TopPageAdvantageDto)
-  advantages: TopPageAdvantageDto[];
+	@ValidateNested({ each: true })
+	@Type(() => TopPageAdvantageDto)
+	advantages: TopPageAdvantageDto[];
 
-  @IsString()
-  seoText: string;
+	@IsString()
+	seoText: string;
 
-  @IsString()
-  tagsTitle: string;
+	@IsString()
+	tagsTitle: string;
 
-  @IsString({ each: true })
-  tags: string[];
+	@IsString({ each: true })
+	tags: string[];
 }

@@ -5,8 +5,8 @@ import { TopPageModule } from 'src/top-page/top-page.module';
 import { HhService } from './hh.service';
 
 @Module({
-  providers: [HhService],
-  imports: [ConfigModule, HttpModule],
-  exports: [HhService],
+	providers: [HhService],
+	imports: [ConfigModule, HttpModule],
+	exports: [HhService],
 })
 export class HhModule {}

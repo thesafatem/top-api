@@ -14,26 +14,26 @@ import { HhModule } from './hh/hh.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [
-    ScheduleModule.forRoot(),
-    ConfigModule.forRoot(),
-    TypegooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: getMongoConfig,
-    }),
-    AuthModule,
-    TopPageModule,
-    ProductModule,
-    ReviewModule,
-    FilesModule,
-    SitemapModule,
-    TelegramModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: getTelegramConfig,
-    }),
-    HhModule,
-  ],
+	imports: [
+		ScheduleModule.forRoot(),
+		ConfigModule.forRoot(),
+		TypegooseModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: getMongoConfig,
+		}),
+		AuthModule,
+		TopPageModule,
+		ProductModule,
+		ReviewModule,
+		FilesModule,
+		SitemapModule,
+		TelegramModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: getTelegramConfig,
+		}),
+		HhModule,
+	],
 })
 export class AppModule {}

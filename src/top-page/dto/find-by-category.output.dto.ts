@@ -1,10 +1,10 @@
 export class PageDto {
-  alias: string;
-  title: string;
-  _id: string;
+	alias: string;
+	title: string;
+	_id: string;
 }
 
 export class FindByCategoryDto {
-  _id: string;
-  pages: PageDto[];
+	_id: string;
+	pages: PageDto[];
 }

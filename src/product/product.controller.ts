@@ -1,17 +1,17 @@
 import {
-  Controller,
-  Body,
-  Param,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  HttpCode,
-  HttpException,
-  HttpStatus,
-  UsePipes,
-  ValidationPipe,
-  NotFoundException,
+	Controller,
+	Body,
+	Param,
+	Get,
+	Post,
+	Patch,
+	Delete,
+	HttpCode,
+	HttpException,
+	HttpStatus,
+	UsePipes,
+	ValidationPipe,
+	NotFoundException,
 } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
@@ -25,58 +25,64 @@ import { ProductService } from './product.service';
 
 @Controller('product')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+	constructor(private readonly productService: ProductService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
-  @Post('/')
-  async create(@Body() dto: CreateProductDto, @UserEmail() email: string) {
-    return this.productService.create(dto);
-  }
+	@UseGuards(JwtAuthGuard)
+	@UsePipes(new ValidationPipe())
+	@Post('/')
+	async create(
+		@Body() dto: CreateProductDto,
+		@UserEmail() email: string,
+	) {
+		return this.productService.create(dto);
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
-  @Get(':id')
-  async get(@Param('id', IdValidationPipe) id: string) {
-    const product = await this.productService.findById(id);
+	@UseGuards(JwtAuthGuard)
+	@UsePipes(new ValidationPipe())
+	@Get(':id')
+	async get(@Param('id', IdValidationPipe) id: string) {
+		const product = await this.productService.findById(id);
 
-    if (!product) {
-      throw new NotFoundException(PRODUCT_NOT_FOUND);
-    }
+		if (!product) {
+			throw new NotFoundException(PRODUCT_NOT_FOUND);
+		}
 
-    return product;
-  }
+		return product;
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
-  @Delete(':id')
-  async delete(@Param('id', IdValidationPipe) id: string) {
-    const deletedDoc = await this.productService.deleteById(id);
+	@UseGuards(JwtAuthGuard)
+	@UsePipes(new ValidationPipe())
+	@Delete(':id')
+	async delete(@Param('id', IdValidationPipe) id: string) {
+		const deletedDoc = await this.productService.deleteById(id);
 
-    if (!deletedDoc) {
-      throw new NotFoundException(PRODUCT_NOT_FOUND);
-    }
-  }
+		if (!deletedDoc) {
+			throw new NotFoundException(PRODUCT_NOT_FOUND);
+		}
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @Patch(':id')
-  async patch(
-    @Param('id', IdValidationPipe) id: string,
-    @Body() dto: ProductModel,
-  ) {
-    const updatedProduct = await this.productService.updateById(id, dto);
-    if (!updatedProduct) {
-      throw new NotFoundException(PRODUCT_NOT_FOUND);
-    }
+	@UseGuards(JwtAuthGuard)
+	@Patch(':id')
+	async patch(
+		@Param('id', IdValidationPipe) id: string,
+		@Body() dto: ProductModel,
+	) {
+		const updatedProduct = await this.productService.updateById(
+			id,
+			dto,
+		);
+		if (!updatedProduct) {
+			throw new NotFoundException(PRODUCT_NOT_FOUND);
+		}
 
-    return updatedProduct;
-  }
+		return updatedProduct;
+	}
 
-  @UseGuards(JwtAuthGuard)
-  @UsePipes(new ValidationPipe())
-  @HttpCode(200)
-  @Post('/find')
-  async find(@Body() dto: FindProductDto) {
-    return this.productService.findWithReviews(dto);
-  }
+	@UseGuards(JwtAuthGuard)
+	@UsePipes(new ValidationPipe())
+	@HttpCode(200)
+	@Post('/find')
+	async find(@Body() dto: FindProductDto) {
+		return this.productService.findWithReviews(dto);
+	}
 }

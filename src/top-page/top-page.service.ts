@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { ModelType, DocumentType } from '@typegoose/typegoose/lib/types';
+import {
+	ModelType,
+	DocumentType,
+} from '@typegoose/typegoose/lib/types';
 import { InjectModel } from 'nestjs-typegoose';
-import { CreateTopPageDto, TopCategory } from './dto/create-top-page.dto';
+import {
+	CreateTopPageDto,
+	TopCategory,
+} from './dto/create-top-page.dto';
 import { FindByCategoryDto } from './dto/find-by-category.output.dto';
 import { TopPageModel } from './top-page.model';
 import { addDays } from 'date-fns';
@@ -9,79 +15,91 @@ import { Types } from 'mongoose';
 
 @Injectable()
 export class TopPageService {
-  constructor(
-    @InjectModel(TopPageModel)
-    private readonly topPageModel: ModelType<TopPageModel>,
-  ) {}
+	constructor(
+		@InjectModel(TopPageModel)
+		private readonly topPageModel: ModelType<TopPageModel>,
+	) {}
 
-  async create(dto: CreateTopPageDto): Promise<DocumentType<TopPageModel>> {
-    return this.topPageModel.create(dto);
-  }
+	async create(
+		dto: CreateTopPageDto,
+	): Promise<DocumentType<TopPageModel>> {
+		return this.topPageModel.create(dto);
+	}
 
-  async findById(id: string): Promise<DocumentType<TopPageModel> | null> {
-    return this.topPageModel.findById(id).exec();
-  }
+	async findById(
+		id: string,
+	): Promise<DocumentType<TopPageModel> | null> {
+		return this.topPageModel.findById(id).exec();
+	}
 
-  async findByAlias(alias: string): Promise<DocumentType<TopPageModel>[]> {
-    return this.topPageModel.find({ alias }).exec();
-  }
+	async findByAlias(
+		alias: string,
+	): Promise<DocumentType<TopPageModel>[]> {
+		return this.topPageModel.find({ alias }).exec();
+	}
 
-  async findAll(): Promise<DocumentType<TopPageModel>[]> {
-    return this.topPageModel.find({}).exec();
-  }
+	async findAll(): Promise<DocumentType<TopPageModel>[]> {
+		return this.topPageModel.find({}).exec();
+	}
 
-  async findByCategory(
-    firstCategory: TopCategory,
-  ): Promise<FindByCategoryDto[]> {
-    return this.topPageModel
-      .aggregate()
-      .match({ firstCategory })
-      .group({
-        _id: { secondCategory: '$secondCategory' },
-        pages: {
-          $push: { alias: '$alias', title: '$title', _id: '$_id' },
-        },
-      })
-      .exec();
-  }
+	async findByCategory(
+		firstCategory: TopCategory,
+	): Promise<FindByCategoryDto[]> {
+		return this.topPageModel
+			.aggregate()
+			.match({ firstCategory })
+			.group({
+				_id: { secondCategory: '$secondCategory' },
+				pages: {
+					$push: { alias: '$alias', title: '$title', _id: '$_id' },
+				},
+			})
+			.exec();
+	}
 
-  async findByText(text: string) {
-    return this.topPageModel
-      .find({
-        $text: {
-          $search: text,
-          $caseSensitive: false,
-        },
-      })
-      .exec();
-  }
+	async findByText(text: string) {
+		return this.topPageModel
+			.find({
+				$text: {
+					$search: text,
+					$caseSensitive: false,
+				},
+			})
+			.exec();
+	}
 
-  async deleteById(id: string): Promise<DocumentType<TopPageModel> | null> {
-    return this.topPageModel.findByIdAndDelete(id).exec();
-  }
+	async deleteById(
+		id: string,
+	): Promise<DocumentType<TopPageModel> | null> {
+		return this.topPageModel.findByIdAndDelete(id).exec();
+	}
 
-  async updateById(
-    id: string | Types.ObjectId,
-    dto: CreateTopPageDto,
-  ): Promise<DocumentType<TopPageModel> | null> {
-    return this.topPageModel.findByIdAndUpdate(id, dto, { new: true }).exec();
-  }
+	async updateById(
+		id: string | Types.ObjectId,
+		dto: CreateTopPageDto,
+	): Promise<DocumentType<TopPageModel> | null> {
+		return this.topPageModel
+			.findByIdAndUpdate(id, dto, { new: true })
+			.exec();
+	}
 
-  async findByHhDate(date: Date): Promise<DocumentType<TopPageModel>[]> {
-    return this.topPageModel
-      .find({
-        firstCategory: 0,
-        $or: [
-          {
-            'hh.updatedAt': {
-              $lt: addDays(date, -1),
-            },
-          },
-          {
-            'hh.updatedAt': { $exists: false },
-          },
-        ],
-      })
-      .exec();
-  }
+	async findByHhDate(
+		date: Date,
+	): Promise<DocumentType<TopPageModel>[]> {
+		return this.topPageModel
+			.find({
+				firstCategory: 0,
+				$or: [
+					{
+						'hh.updatedAt': {
+							$lt: addDays(date, -1),
+						},
+					},
+					{
+						'hh.updatedAt': { $exists: false },
+					},
+				],
+			})
+			.exec();
+	}
 }
