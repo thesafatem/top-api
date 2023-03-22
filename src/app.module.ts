@@ -12,9 +12,15 @@ import { TelegramModule } from './telegram/telegram.module';
 import { getTelegramConfig } from './configs/telegram.config';
 import { HhModule } from './hh/hh.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
 	imports: [
+		MongooseModule.forRootAsync({
+			imports: [ConfigModule],
+			inject: [ConfigService],
+			useFactory: getMongoConfig,
+		}),
 		ScheduleModule.forRoot(),
 		ConfigModule.forRoot(),
 		TypegooseModule.forRootAsync({
