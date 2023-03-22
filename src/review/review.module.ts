@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TypegooseModule } from 'nestjs-typegoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TelegramModule } from 'src/telegram/telegram.module';
+import { Review, ReviewSchema } from './models/review.model';
 import { ReviewController } from './review.controller';
-import { ReviewModel } from './review.model';
 import { ReviewService } from './review.service';
 
 @Module({
 	controllers: [ReviewController],
 	imports: [
-		TypegooseModule.forFeature([
+		MongooseModule.forFeature([
 			{
-				typegooseClass: ReviewModel,
-				schemaOptions: {
-					collection: 'Review',
-				},
+				name: Review.name,
+				schema: ReviewSchema,
 			},
 		]),
 		TelegramModule,
