@@ -14,14 +14,6 @@ import { User, UserSchema } from './models/user.model';
 @Module({
 	controllers: [AuthController],
 	imports: [
-		// TypegooseModule.forFeature([
-		// 	{
-		// 		typegooseClass: UserModel,
-		// 		schemaOptions: {
-		// 			collection: 'User',
-		// 		},
-		// 	},
-		// ]),
 		MongooseModule.forFeature([
 			{
 				name: User.name,

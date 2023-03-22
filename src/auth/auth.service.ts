@@ -14,7 +14,8 @@ import { Model } from 'mongoose';
 @Injectable()
 export class AuthService {
 	constructor(
-		@InjectModel(User.name) private userModel: Model<UserDocument>,
+		@InjectModel(User.name)
+		private readonly userModel: Model<UserDocument>,
 		private readonly jwtService: JwtService,
 	) {}
 

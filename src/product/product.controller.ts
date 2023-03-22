@@ -78,11 +78,11 @@ export class ProductController {
 		return updatedProduct;
 	}
 
-	@UseGuards(JwtAuthGuard)
-	@UsePipes(new ValidationPipe())
-	@HttpCode(200)
-	@Post('/find')
-	async find(@Body() dto: FindProductDto) {
-		return this.productService.findWithReviews(dto);
-	}
+	// @UseGuards(JwtAuthGuard)
+	// @UsePipes(new ValidationPipe())
+	// @HttpCode(200)
+	// @Post('/find')
+	// async find(@Body() dto: FindProductDto) {
+	// 	return this.productService.findWithReviews(dto);
+	// }
 }
