@@ -1,44 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import {
-	ModelType,
-	DocumentType,
-} from '@typegoose/typegoose/lib/types';
-import { InjectModel } from 'nestjs-typegoose';
+import { InjectModel } from '@nestjs/mongoose';
 import {
 	CreateTopPageDto,
 	TopCategory,
 } from './dto/create-top-page.dto';
 import { FindByCategoryDto } from './dto/find-by-category.output.dto';
-import { TopPageModel } from './top-page.model';
 import { addDays } from 'date-fns';
-import { Types } from 'mongoose';
+import { Model, Types } from 'mongoose';
+import { TopPage, TopPageDocument } from './models/top-page.model';
 
 @Injectable()
 export class TopPageService {
 	constructor(
-		@InjectModel(TopPageModel)
-		private readonly topPageModel: ModelType<TopPageModel>,
+		@InjectModel(TopPage.name)
+		private topPageModel: Model<TopPageDocument>,
 	) {}
 
-	async create(
-		dto: CreateTopPageDto,
-	): Promise<DocumentType<TopPageModel>> {
-		return this.topPageModel.create(dto);
+	async create(dto: CreateTopPageDto): Promise<TopPageDocument> {
+		const newTopPage = new this.topPageModel(dto);
+		return newTopPage.save();
 	}
 
-	async findById(
-		id: string,
-	): Promise<DocumentType<TopPageModel> | null> {
+	async findById(id: string): Promise<TopPageDocument | null> {
 		return this.topPageModel.findById(id).exec();
 	}
 
-	async findByAlias(
-		alias: string,
-	): Promise<DocumentType<TopPageModel>[]> {
+	async findByAlias(alias: string): Promise<TopPageDocument[]> {
 		return this.topPageModel.find({ alias }).exec();
 	}
 
-	async findAll(): Promise<DocumentType<TopPageModel>[]> {
+	async findAll(): Promise<TopPageDocument[]> {
 		return this.topPageModel.find({}).exec();
 	}
 
@@ -57,7 +48,7 @@ export class TopPageService {
 			.exec();
 	}
 
-	async findByText(text: string) {
+	async findByText(text: string): Promise<TopPageDocument[]> {
 		return this.topPageModel
 			.find({
 				$text: {
@@ -68,24 +59,20 @@ export class TopPageService {
 			.exec();
 	}
 
-	async deleteById(
-		id: string,
-	): Promise<DocumentType<TopPageModel> | null> {
+	async deleteById(id: string): Promise<TopPageDocument | null> {
 		return this.topPageModel.findByIdAndDelete(id).exec();
 	}
 
 	async updateById(
 		id: string | Types.ObjectId,
 		dto: CreateTopPageDto,
-	): Promise<DocumentType<TopPageModel> | null> {
+	): Promise<TopPageDocument | null> {
 		return this.topPageModel
 			.findByIdAndUpdate(id, dto, { new: true })
 			.exec();
 	}
 
-	async findByHhDate(
-		date: Date,
-	): Promise<DocumentType<TopPageModel>[]> {
+	async findByHhDate(date: Date): Promise<TopPageDocument[]> {
 		return this.topPageModel
 			.find({
 				firstCategory: 0,

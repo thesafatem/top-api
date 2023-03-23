@@ -1,19 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TypegooseModule } from 'nestjs-typegoose';
+import { MongooseModule } from '@nestjs/mongoose';
 import { HhModule } from 'src/hh/hh.module';
+import { TopPage, TopPageSchema } from './models/top-page.model';
 import { TopPageController } from './top-page.controller';
-import { TopPageModel } from './top-page.model';
 import { TopPageService } from './top-page.service';
 
 @Module({
 	controllers: [TopPageController],
 	imports: [
-		TypegooseModule.forFeature([
+		MongooseModule.forFeature([
 			{
-				typegooseClass: TopPageModel,
-				schemaOptions: {
-					collection: 'TopPage',
-				},
+				name: TopPage.name,
+				schema: TopPageSchema,
 			},
 		]),
 		HhModule,
