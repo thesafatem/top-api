@@ -16,16 +16,16 @@ export class ProductService {
 		private productModel: Model<ProductDocument>,
 	) {}
 
-	async create(dto: CreateProductDto): Promise<Product> {
+	async create(dto: CreateProductDto): Promise<ProductDocument> {
 		const newProduct = new this.productModel(dto);
 		return newProduct.save();
 	}
 
-	async findById(id: string): Promise<Product | null> {
+	async findById(id: string): Promise<ProductDocument | null> {
 		return this.productModel.findById(id).exec();
 	}
 
-	async deleteById(id: string): Promise<Product | null> {
+	async deleteById(id: string): Promise<ProductDocument | null> {
 		return this.productModel.findByIdAndDelete(id).exec();
 	}
 

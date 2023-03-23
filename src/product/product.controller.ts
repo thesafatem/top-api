@@ -7,8 +7,6 @@ import {
 	Patch,
 	Delete,
 	HttpCode,
-	HttpException,
-	HttpStatus,
 	UsePipes,
 	ValidationPipe,
 	NotFoundException,
@@ -20,8 +18,8 @@ import { UserEmail } from '../decorators/user-email.decorator';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductDto } from './dto/find-product.dto';
 import { PRODUCT_NOT_FOUND } from './product.constants';
-import { ProductModel } from './product.model';
 import { ProductService } from './product.service';
+import { Product } from './models/product.model';
 
 @Controller('product')
 export class ProductController {
@@ -65,7 +63,7 @@ export class ProductController {
 	@Patch(':id')
 	async patch(
 		@Param('id', IdValidationPipe) id: string,
-		@Body() dto: ProductModel,
+		@Body() dto: Product,
 	) {
 		const updatedProduct = await this.productService.updateById(
 			id,
