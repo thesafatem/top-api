@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FindProductDto } from './dto/find-product.dto';
 import { Product, ProductDocument } from './models/product.model';
 import {
 	Review,
 	ReviewDocument,
 } from 'src/review/models/review.model';
+import { FindProductQueryDto } from './dto/find-product.query.dto';
 
 @Injectable()
 export class ProductService {
@@ -35,63 +35,64 @@ export class ProductService {
 			.exec();
 	}
 
-	async findWithReviews(dto: FindProductDto) {
+	async findWithReviews(dto: FindProductQueryDto) {
+		const aggregationArray = this.getFindAggregationArray(dto);
+
 		return this.productModel
-			.aggregate([
-				{
-					// take if array contains some element
-					$match: {
-						categories: dto.category,
-					},
-				},
-				{
-					// by default sort is not stable
-					$sort: {
-						_id: 1,
-					},
-				},
-				{
-					// limit the number of retrieved products
-					$limit: dto.limit,
-				},
-				{
-					// go to another collection
-					$lookup: {
-						// name of that collection
-						from: Review.name,
-
-						// field in the inner collection
-						localField: '_id',
-
-						// field in the main collection
-						foreignField: 'productId',
-
-						// alias
-						as: 'reviews',
-					},
-				},
-				{
-					// add some fields to the output
-					$addFields: {
-						reviewCount: { $size: '$reviews' },
-						reviewAverageRating: { $avg: '$reviews.rating' },
-						reviews: {
-							$function: {
-								body: `function(reviews) {
-									reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-									return reviews
-								}`,
-								args: ['$reviews'],
-								lang: 'js',
-							},
-						},
-					},
-				},
-			])
+			.aggregate(aggregationArray)
 			.exec() as unknown as (ProductDocument & {
 			review: ReviewDocument[];
 			reviewCount: number;
 			reviewAverageRating: number;
 		})[];
+	}
+
+	private getFindAggregationArray(dto: FindProductQueryDto): any[] {
+		const aggregations: any[] = [
+			{
+				$sort: {
+					_id: 1,
+				},
+			},
+			{
+				$lookup: {
+					from: Review.name,
+					localField: '_id',
+					foreignField: 'productId',
+					as: 'reviews',
+				},
+			},
+			{
+				$addFields: {
+					reviewCount: { $size: '$reviews' },
+					reviewAverageRating: { $avg: '$reviews.rating' },
+					reviews: {
+						$function: {
+							body: `function(reviews) {
+									reviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+									return reviews
+								}`,
+							args: ['$reviews'],
+							lang: 'js',
+						},
+					},
+				},
+			},
+		];
+
+		if (dto.category) {
+			aggregations.push({
+				$match: {
+					categories: dto.category,
+				},
+			});
+		}
+		if (dto.limit) {
+			aggregations.push({
+				$limit: dto.limit,
+			});
+		}
+
+		return aggregations;
 	}
 }

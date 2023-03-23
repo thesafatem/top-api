@@ -10,16 +10,17 @@ import {
 	UsePipes,
 	ValidationPipe,
 	NotFoundException,
+	Query,
 } from '@nestjs/common';
 import { UseGuards } from '@nestjs/common/decorators/core/use-guards.decorator';
 import { IdValidationPipe } from '../pipes/id-validation.pipe';
 import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { UserEmail } from '../decorators/user-email.decorator';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FindProductDto } from './dto/find-product.dto';
 import { PRODUCT_NOT_FOUND } from './product.constants';
 import { ProductService } from './product.service';
 import { Product } from './models/product.model';
+import { FindProductQueryDto } from './dto/find-product.query.dto';
 
 @Controller('product')
 export class ProductController {
@@ -77,10 +78,18 @@ export class ProductController {
 	}
 
 	@UseGuards(JwtAuthGuard)
-	@UsePipes(new ValidationPipe())
 	@HttpCode(200)
-	@Post('/find')
-	async find(@Body() dto: FindProductDto) {
+	@Get('/')
+	async find(
+		@Query(
+			new ValidationPipe({
+				transform: true,
+				transformOptions: { enableImplicitConversion: true },
+				forbidNonWhitelisted: true,
+			}),
+		)
+		dto: FindProductQueryDto,
+	) {
 		return this.productService.findWithReviews(dto);
 	}
 }
