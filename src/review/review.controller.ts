@@ -28,20 +28,10 @@ export class ReviewController {
 	@UsePipes(new ValidationPipe())
 	@Post('/')
 	async create(@Body() dto: CreateReviewDto) {
-		return this.reviewService.create(dto);
-	}
-
-	@UseGuards(JwtAuthGuard)
-	@UsePipes(new ValidationPipe())
-	@Post('notify')
-	async notify(@Body() dto: CreateReviewDto) {
-		const message =
-			`Name: ${dto.name}\n` +
-			`Heading: ${dto.title}\n` +
-			`Description: ${dto.description}\n` +
-			`Rating: ${dto.rating}\n` +
-			`Product ID: ${dto.productId}\n`;
-		return this.telegramService.sendMessage(message);
+		const review = this.reviewService.create(dto);
+		const message = this.getReviewCreateMessage(dto);
+		this.telegramService.sendMessage(message);
+		return review;
 	}
 
 	@Delete(':id')
@@ -58,5 +48,15 @@ export class ReviewController {
 		@Param('productId', IdValidationPipe) productId: string,
 	) {
 		return this.reviewService.findByProductId(productId);
+	}
+
+	private getReviewCreateMessage(dto: CreateReviewDto): string {
+		return (
+			`Name: ${dto.name}\n` +
+			`Heading: ${dto.title}\n` +
+			`Description: ${dto.description}\n` +
+			`Rating: ${dto.rating}\n` +
+			`Product ID: ${dto.productId}\n`
+		);
 	}
 }
