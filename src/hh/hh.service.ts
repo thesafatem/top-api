@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable, Logger } from '@nestjs/common';
 import { lastValueFrom } from 'rxjs';
-import { HhData } from 'src/top-page/models/top-page.model';
+import { HhData } from '../top-page/models/top-page.model';
 import { API_URL, SALARY_CLUSTER_ID } from './hh.constants';
 import { HhResponse } from './hh.models';
 

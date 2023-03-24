@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { UploadedFile, UseGuards } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { FileElementResponse } from './dto/file-element.response';
 import { FilesService } from './files.service';
 import { MFile } from './mfile.class';

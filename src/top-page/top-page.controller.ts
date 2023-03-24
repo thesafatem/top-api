@@ -17,7 +17,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt.guard';
 import { CreateTopPageDto } from './dto/create-top-page.dto';
 import { TOP_PAGE_NOT_FOUND } from './top-page.constants';
 import { TopPageService } from './top-page.service';
-import { HhService } from 'src/hh/hh.service';
+import { HhService } from '../hh/hh.service';
 import { Cron } from '@nestjs/schedule';
 import { FindTopPageQueryDto } from './dto/find.query.dto';
 

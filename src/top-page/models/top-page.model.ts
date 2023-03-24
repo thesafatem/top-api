@@ -39,7 +39,7 @@ export class HhData {
 	seniorSalary: number;
 
 	@Prop()
-	updatedAt: Date;
+	updatedAt?: Date;
 }
 
 export const HhDataSchema = SchemaFactory.createForClass(HhData);

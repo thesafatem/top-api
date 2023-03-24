@@ -6,7 +6,7 @@ import { Product, ProductDocument } from './models/product.model';
 import {
 	Review,
 	ReviewDocument,
-} from 'src/review/models/review.model';
+} from '../review/models/review.model';
 import { FindProductQueryDto } from './dto/find-product.query.dto';
 
 @Injectable()

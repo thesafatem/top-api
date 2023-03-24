@@ -7,9 +7,8 @@ import { AuthDto } from '../src/auth/dto/auth.dto';
 import {
 	CreateTopPageDto,
 	HhDataDto,
-} from 'src/top-page/dto/create-top-page.dto';
+} from '../src/top-page/dto/create-top-page.dto';
 import { TOP_PAGE_NOT_FOUND } from '../src/top-page/top-page.constants';
-import { FindTopPageDto } from '../src/top-page/dto/find-top-page.dto';
 
 const loginDto: AuthDto = {
 	login: 'test@test.com',
@@ -39,10 +38,6 @@ const testDto: CreateTopPageDto = {
 	seoText: 'test seo text',
 	tagsTitle: 'test tags title',
 	tags: ['test tag 1', 'test tag 2'],
-};
-
-const testFindDto: FindTopPageDto = {
-	firstCategory: 1,
 };
 
 describe('TopPageController (e2e)', () => {
@@ -91,10 +86,7 @@ describe('TopPageController (e2e)', () => {
 					juniorSalary: -1,
 				},
 			})
-			.expect(400)
-			.then(({ body }: request.Response) => {
-				console.log(body);
-			});
+			.expect(400);
 	});
 
 	it('/top-page/:id (GET) - success', async () => {
@@ -118,20 +110,25 @@ describe('TopPageController (e2e)', () => {
 			});
 	});
 
-	it('/top-page/find (POST) - success', async () => {
+	it('/top-page (GET) - success', async () => {
 		return request(app.getHttpServer())
-			.post('/top-page/find')
+			.get('/top-page')
 			.set('Authorization', 'Bearer ' + token)
-			.send(testFindDto)
+			.query({
+				firstCategory: testDto.firstCategory,
+			})
 			.expect(200)
 			.then(({ body }: request.Response) => {
 				expect(body.length).toBeGreaterThanOrEqual(1);
 			});
 	});
 
-	it('/top-page/by-alias/:alias (GET)', async () => {
+	it('/top-page (GET) - success', async () => {
 		return request(app.getHttpServer())
-			.get('/top-page/by-alias/' + testDto.alias)
+			.get('/top-page')
+			.query({
+				alias: testDto.alias,
+			})
 			.set('Authorization', 'Bearer ' + token)
 			.expect(200)
 			.then(({ body }: request.Response) => {
@@ -139,9 +136,12 @@ describe('TopPageController (e2e)', () => {
 			});
 	});
 
-	it('/top-page/text-search/:text (GET)', async () => {
+	it('/top-page (GET) - success', async () => {
 		return request(app.getHttpServer())
-			.get('/top-page/text-search/' + testDto.title.split(' ')[0])
+			.get('/top-page')
+			.query({
+				text: testDto.title.split(' ')[0],
+			})
 			.set('Authorization', 'Bearer ' + token)
 			.expect(200)
 			.then(({ body }: request.Response) => {

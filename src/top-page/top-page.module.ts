@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { HhModule } from 'src/hh/hh.module';
+import { HhModule } from '../hh/hh.module';
 import { TopPage, TopPageSchema } from './models/top-page.model';
 import { TopPageController } from './top-page.controller';
 import { TopPageService } from './top-page.service';

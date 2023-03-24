@@ -33,7 +33,8 @@ export class HhDataDto {
 	seniorSalary: number;
 
 	@IsDate()
-	updatedAt: Date;
+	@IsOptional()
+	updatedAt?: Date;
 }
 
 export class TopPageAdvantageDto {
