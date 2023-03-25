@@ -17,7 +17,7 @@ import { REVIEW_NOT_FOUND } from './review.constants';
 import { ReviewService } from './review.service';
 import { TelegramService } from '../telegram/telegram.service';
 
-@Controller('review')
+@Controller()
 export class ReviewController {
 	constructor(
 		private readonly reviewService: ReviewService,
@@ -27,36 +27,47 @@ export class ReviewController {
 	@UseGuards(JwtAuthGuard)
 	@UsePipes(new ValidationPipe())
 	@Post('/')
-	async create(@Body() dto: CreateReviewDto) {
-		const review = this.reviewService.create(dto);
-		const message = this.getReviewCreateMessage(dto);
+	async create(
+		@Param('productId', IdValidationPipe) productId: string,
+		@Body() dto: CreateReviewDto,
+	) {
+		const review = this.reviewService.create(productId, dto);
+		const message = this.getReviewCreateMessage(productId, dto);
 		this.telegramService.sendMessage(message);
 		return review;
 	}
 
-	@Delete(':id')
-	async delete(@Param('id', IdValidationPipe) id: string) {
-		const deletedDoc = await this.reviewService.deleteById(id);
+	@UseGuards(JwtAuthGuard)
+	@Delete(':reviewId')
+	async delete(
+		@Param('productId', IdValidationPipe) productId: string,
+		@Param('reviewId', IdValidationPipe) reviewId: string,
+	) {
+		const deletedDoc = await this.reviewService.deleteById(reviewId);
 
 		if (!deletedDoc) {
 			throw new NotFoundException(REVIEW_NOT_FOUND);
 		}
 	}
 
-	@Get('byProduct/:productId')
+	@UseGuards(JwtAuthGuard)
+	@Get('/')
 	async getByProduct(
 		@Param('productId', IdValidationPipe) productId: string,
 	) {
 		return this.reviewService.findByProductId(productId);
 	}
 
-	private getReviewCreateMessage(dto: CreateReviewDto): string {
+	private getReviewCreateMessage(
+		productId: string,
+		dto: CreateReviewDto,
+	): string {
 		return (
 			`Name: ${dto.name}\n` +
 			`Heading: ${dto.title}\n` +
 			`Description: ${dto.description}\n` +
 			`Rating: ${dto.rating}\n` +
-			`Product ID: ${dto.productId}\n`
+			`Product ID: ${productId}\n`
 		);
 	}
 }

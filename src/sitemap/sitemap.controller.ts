@@ -5,7 +5,7 @@ import { format, subDays } from 'date-fns';
 import { Builder } from 'xml2js';
 import { CATEGORY_URL } from './sitemap.constants';
 
-@Controller('sitemap')
+@Controller()
 export class SitemapController {
 	domain: string;
 

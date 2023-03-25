@@ -12,9 +12,38 @@ import { getTelegramConfig } from './configs/telegram.config';
 import { HhModule } from './hh/hh.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { MongooseModule } from '@nestjs/mongoose';
+import { RouterModule } from '@nestjs/core';
 
 @Module({
 	imports: [
+		RouterModule.register([
+			{
+				path: 'auth',
+				module: AuthModule,
+			},
+			{
+				path: 'top-page',
+				module: TopPageModule,
+			},
+			{
+				path: 'product',
+				module: ProductModule,
+				children: [
+					{
+						path: '/:productId/review',
+						module: ReviewModule,
+					},
+				],
+			},
+			{
+				path: 'files',
+				module: FilesModule,
+			},
+			{
+				path: 'sitemap',
+				module: SitemapModule,
+			},
+		]),
 		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],

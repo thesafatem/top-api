@@ -11,8 +11,11 @@ export class ReviewService {
 		private reviewModel: Model<ReviewDocument>,
 	) {}
 
-	async create(dto: CreateReviewDto): Promise<ReviewDocument> {
-		const newReview = new this.reviewModel(dto);
+	async create(
+		productId: string,
+		dto: CreateReviewDto,
+	): Promise<ReviewDocument> {
+		const newReview = new this.reviewModel({ ...dto, productId });
 		return newReview.save();
 	}
 

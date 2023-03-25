@@ -19,7 +19,6 @@ const testDto: CreateReviewDto = {
 	title: 'title',
 	description: 'description',
 	rating: 5,
-	productId: productId,
 };
 
 describe('ReviewController (e2e)', () => {
@@ -45,9 +44,9 @@ describe('ReviewController (e2e)', () => {
 		token = accessToken;
 	});
 
-	it('/review (POST) - success', async () => {
+	it('/product/:productId/review (POST) - success', async () => {
 		return request(app.getHttpServer())
-			.post('/review')
+			.post('/product/' + productId + '/review')
 			.set('Authorization', 'Bearer ' + token)
 			.send(testDto)
 			.expect(201)
@@ -57,9 +56,9 @@ describe('ReviewController (e2e)', () => {
 			});
 	});
 
-	it('/review (POST) - fail', async () => {
+	it('/product/:productId/review (POST) - fail', async () => {
 		return request(app.getHttpServer())
-			.post('/review')
+			.post('/product/' + productId + '/review')
 			.set('Authorization', 'Bearer ' + token)
 			.send({ ...testDto, rating: 0 })
 			.expect(400)
@@ -68,33 +67,39 @@ describe('ReviewController (e2e)', () => {
 			});
 	});
 
-	it('/review/byProduct/:productId (GET) - success', async () => {
+	it('/product/:productId/review (GET) - success', async () => {
 		return request(app.getHttpServer())
-			.get('/review/byProduct/' + productId)
+			.get('/product/' + productId + '/review')
+			.set('Authorization', 'Bearer ' + token)
 			.expect(200)
 			.then(({ body }: request.Response) => {
 				expect(body.length).toBe(1);
 			});
 	});
 
-	it('/review/byProduct/:productId (GET) - fail', async () => {
+	it('/product/:productId/review (GET) - fail', async () => {
+		const randomProductId = new Types.ObjectId().toHexString();
 		return request(app.getHttpServer())
-			.get('/review/byProduct/' + new Types.ObjectId().toHexString())
+			.get('/product/' + randomProductId + '/review')
+			.set('Authorization', 'Bearer ' + token)
 			.expect(200)
 			.then(({ body }: request.Response) => {
 				expect(body.length).toBe(0);
 			});
 	});
 
-	it('/review/:id (DELETE) - success', () => {
+	it('/product/:productId/review/:reviewId (DELETE) - success', () => {
 		return request(app.getHttpServer())
-			.delete('/review/' + createdId)
+			.delete('/product/' + productId + '/review/' + createdId)
+			.set('Authorization', 'Bearer ' + token)
 			.expect(200);
 	});
 
-	it('/review/:id (DELETE) - fail', () => {
+	it('/product/:productId/review/:reviewId (DELETE) - fail', () => {
+		const randomProductId = new Types.ObjectId().toHexString();
 		return request(app.getHttpServer())
-			.delete('/review/' + new Types.ObjectId().toHexString())
+			.delete('/product/' + productId + '/review/' + randomProductId)
+			.set('Authorization', 'Bearer ' + token)
 			.expect(404, {
 				statusCode: 404,
 				message: REVIEW_NOT_FOUND,

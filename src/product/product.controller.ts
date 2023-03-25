@@ -22,7 +22,7 @@ import { ProductService } from './product.service';
 import { Product } from './models/product.model';
 import { FindProductQueryDto } from './dto/find-product.query.dto';
 
-@Controller('product')
+@Controller()
 export class ProductController {
 	constructor(private readonly productService: ProductService) {}
 

@@ -21,7 +21,7 @@ import { HhService } from '../hh/hh.service';
 import { Cron } from '@nestjs/schedule';
 import { FindTopPageQueryDto } from './dto/find.query.dto';
 
-@Controller('top-page')
+@Controller()
 export class TopPageController {
 	constructor(
 		private readonly topPageService: TopPageService,
